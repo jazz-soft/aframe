@@ -1,0 +1,50 @@
+<html>
+<head>
+  <script src="https://aframe.io/releases/1.0.4/aframe.min.js"></script>
+</head>
+<body>
+<h1>A-Frame</h1>
+<a-scene>
+  <a-sky color="#888" opacity="0.5"></a-sky>
+  <!a-camera>
+    <!a-cursor><!/a-cursor>
+  <!/a-camera>
+</a-scene>
+<script>
+var x0 = 0;
+var y0 = 2;
+var z0 = -5;
+var sceneEl = document.querySelector('a-scene');
+
+function addBall(a, b, c, w) {
+  var x = x0 + a + b/2 + c/2;
+  var y = y0 + b * Math.sqrt(3/4) + c * Math.sqrt(1/12);
+  var z = z0 + c * Math.sqrt(2/3);
+  var entityEl = document.createElement('a-entity');
+  entityEl.setAttribute('geometry', { primitive: "sphere", radius: "0.5"});
+  entityEl.setAttribute('material', { color: w, opacity: "0.5" });
+  entityEl.setAttribute('position', { 'x': x, 'y': y, 'z': z});
+  sceneEl.appendChild(entityEl);
+}
+
+addBall(0, 0, 0, "#888");
+
+addBall(1, 0, 0, "#f88");
+addBall(0, 1, 0, "#8f8");
+addBall(0, -1, 0, "#808");
+addBall(-1, 0, 0, "#088");
+addBall(1, -1, 0, "#f08");
+addBall(-1, 1, 0, "#0f8");
+
+addBall(0, 0, 1, "#88f");
+addBall(-1, 0, 1, "#08f");
+addBall(0, -1, 1, "#80f");
+
+addBall(0, 0, -1, "#880");
+addBall(1, 0, -1, "#f80");
+addBall(0, 1, -1, "#8f0");
+
+
+</script>
+</body>
+</html>
