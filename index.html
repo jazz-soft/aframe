@@ -4,7 +4,7 @@
 </head>
 <body>
 <a-scene>
-  <a-sky color="#888" opacity="0.5"></a-sky>
+  <a-sky src="360.jpg"></a-sky>
   <!a-camera>
     <!a-cursor><!/a-cursor>
   <!/a-camera>
@@ -21,7 +21,7 @@ function addBall(a, b, c, w) {
   var z = z0 + c * Math.sqrt(2/3);
   var entityEl = document.createElement('a-entity');
   entityEl.setAttribute('geometry', { primitive: "sphere", radius: "0.5"});
-  entityEl.setAttribute('material', { color: w, opacity: "0.5" });
+  entityEl.setAttribute('material', { color: w, opacity: "0.6" });
   entityEl.setAttribute('position', { 'x': x, 'y': y, 'z': z});
   sceneEl.appendChild(entityEl);
 }
