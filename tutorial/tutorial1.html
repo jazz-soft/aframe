@@ -1,0 +1,13 @@
+<html>
+<head>
+<script src="https://aframe.io/releases/1.0.4/aframe.min.js"></script>
+<script src="https://unpkg.com/aframe-environment-component/dist/aframe-environment-component.min.js"></script>
+</head>
+<body>
+  <a-scene>
+  <a-box src="texture.jpg" position="0 2 -5" rotation="0 45 45" scale="2 2 2"></a-box>
+  <!a-sky color="#222"><!/a-sky>
+  <a-entity environment="preset: forest; dressingAmount: 500"></a-entity>
+  </a-scene>
+</body>
+</html>
