@@ -5,9 +5,15 @@
 </head>
 <body>
   <a-scene>
-  <a-box src="texture.jpg" position="0 2 -5" rotation="0 45 45" scale="2 2 2"></a-box>
-  <!a-sky color="#222"><!/a-sky>
+  <a-box src="texture.jpg" position="0 2 -5" rotation="0 45 45" scale="2 2 2"
+    animation__position="property: object3D.position.y; to: 2.5; dir: alternate; dur: 2000; loop: true"
+    animation__mouseenter="property: scale; to: 3 3 3; dur: 300; startEvents: mouseenter"
+    animation__mouseleave="property: scale; to: 2 2 2; dur: 300; startEvents: mouseleave"></a-box>
   <a-entity environment="preset: forest; dressingAmount: 500"></a-entity>
+  <a-entity text="value: It works!; color: #bbf" position="0 0.5 -5" scale="5 5 5"></a-entity>
+  <a-camera>
+    <a-cursor></a-cursor>
+  </a-camera>
   </a-scene>
 </body>
 </html>
