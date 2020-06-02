@@ -16,9 +16,9 @@ AFRAME.registerComponent('disappear', {
 <a-scene>
 
  <a-sky color="#aaa"></a-sky>
- <a-sphere position="0 2 -3" disappear></a-sphere>
- <a-entity laser-controls="hand:left"></a-entity>
- <a-entity laser-controls="hand:right"></a-entity>
+ <a-sphere class="clicable" position="0 2 -3" disappear></a-sphere>
+ <a-entity laser-controls="hand:left" raycaster="objects: .clicable; far:5"></a-entity>
+ <a-entity laser-controls="hand:right" raycaster="objects:.clicable; far:5"></a-entity>
 
 <a-entity id="camera" position="0 1.6 0" camera look-controls wasd-controls>        
   <a-entity cursor="rayOrigin:mouse"></a-entity>      
