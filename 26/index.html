@@ -2,16 +2,27 @@
 <head>
 <script src="https://aframe.io/releases/1.0.4/aframe.min.js"></script>
 <script>
-
+AFRAME.registerComponent('disappear', {    
+  init: function () {        
+    let disappearfunc = () => {      
+      this.el.setAttribute("visible", false);    
+    };        
+    this.el.addEventListener('click', disappearfunc);      
+  }  
+});
 </script>
 </head>
 <body>
 <a-scene>
 
  <a-sky color="#aaa"></a-sky>
- <a-sphere position="0 2 -3"></a-sphere>
+ <a-sphere position="0 2 -3" disappear></a-sphere>
  <a-entity laser-controls="hand:left"></a-entity>
  <a-entity laser-controls="hand:right"></a-entity>
+
+<a-entity id="camera" position="0 1.6 0" camera look-controls wasd-controls>        
+  <a-entity cursor="rayOrigin:mouse"></a-entity>      
+</a-entity>
 
 </a-scene>
 </body>
