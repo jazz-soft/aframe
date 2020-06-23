@@ -3,13 +3,26 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <script src="https://aframe.io/releases/1.0.4/aframe.min.js"></script>
 <script>
-AFRAME.registerComponent('disappear', {    
-  init: function () {        
-    let disappearfunc = () => {      
-      this.el.setAttribute("visible", false);    
-    };        
-    this.el.addEventListener('click', disappearfunc);      
-  }  
+AFRAME.registerComponent('spinner', {
+  init: function () {
+    this.spin = {x: 0, y: 0, z: 0};
+  },
+  tick: function(t, dt) {
+    this.cam = this.cam || document.querySelector('#camera');
+    var rot = this.cam.getAttribute('rotation');
+    this.spin.x = rot.x * -3;
+    this.spin.y = rot.y * -3;
+    this.spin.z = rot.z * -3;
+    this.el.setAttribute('rotation', this.spin);
+  }
+});
+AFRAME.registerComponent('disappear', {
+  init: function () {
+    let disappearfunc = () => {
+      this.el.setAttribute("visible", false);
+    };
+    this.el.addEventListener('click', disappearfunc);
+  }
 });
 </script>
 </head>
@@ -17,11 +30,13 @@ AFRAME.registerComponent('disappear', {
 <a-scene>
 
  <a-sky color="#aaa"></a-sky>
- <a-sphere class="clicable" position="0 2 -3" disappear></a-sphere>
  <a-entity laser-controls="hand:left" raycaster="objects: .clicable; far:5"></a-entity>
  <a-entity laser-controls="hand:right" raycaster="objects:.clicable; far:5"></a-entity>
 
  <a-entity id="camera" position="0 1.6 0" camera look-controls wasd-controls>
+  <a-entity position="0 0 -2" spinner>
+   <a-box color="tomato" depth="1" height="1" width="1" disappear></a-box>
+  </a-entity>
   <a-entity cursor="rayOrigin:mouse"></a-entity>
  </a-entity>
 
