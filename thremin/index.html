@@ -3,21 +3,42 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <script src="https://aframe.io/releases/1.0.4/aframe.min.js"></script>
 <script>
+AFRAME.registerComponent('theremin', {
+  init: function () {
+    this.left = document.querySelector('#left');
+    this.right = document.querySelector('#right');
+    this.text = document.querySelector('#text');
+  },
+  tick: function(t, dt) {
+    var lp = this.left.getAttribute('position');
+    var lr = this.left.getAttribute('rotation');
+    var rp = this.right.getAttribute('position');
+    var rr = this.right.getAttribute('rotation');
+    if (lp.x || lp.y || lp.z || rp.x || rp.y || rp.z) {
+      var txt = 'left: x=' + lp.x + ' y=' + lp.y + ' z=' + lp.z +
+             '\nright: x=' + rp.x + ' y=' + rp.y + ' z=' + rp.z;
+      this.text.setAttribute('text', { 'value': txt });
+    }
+  }
+});
 </script>
 </head>
 <body>
 <a-scene>
 
  <a-sky color="#aaa"></a-sky>
+ <a-entity id="left" hand-controls="hand:left;color:#f80"></a-entity>
+ <a-entity id="right" hand-controls="hand:right;color:#f80"></a-entity>
+ <a-entity theremin></a-entity>
 
  <a-entity id="camera" camera look-controls wasd-controls>
-  <a-entity id="text" text="align:center;" position="0 0 -1"></a-entity>
+  <a-entity id="text" text="align:center;" position="0 0 -.5"></a-entity>
  </a-entity>
 
 </a-scene>
 <script>
 var text = document.querySelector('#text');
-text.setAttribute('text', {'value': 'Coming soon...'});
+text.setAttribute('text', { 'value': 'This app requires hand controls!' });
 </script>
 </body>
 </html>
