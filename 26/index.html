@@ -30,12 +30,12 @@ AFRAME.registerComponent('disappear', {
 <a-scene>
 
  <a-sky color="#aaa"></a-sky>
- <a-entity laser-controls="hand:left" raycaster="objects: .clicable; far:5"></a-entity>
- <a-entity laser-controls="hand:right" raycaster="objects:.clicable; far:5"></a-entity>
+ <a-entity laser-controls="hand:left" raycaster="objects: .clickable; far:5"></a-entity>
+ <a-entity laser-controls="hand:right" raycaster="objects:.clickable; far:5"></a-entity>
 
  <a-entity id="camera" camera look-controls wasd-controls>
   <a-entity position="0 0 -2" spinner>
-   <a-box color="tomato" depth="1" height="1" width="1" disappear></a-box>
+   <a-box class="clickable" color="tomato" depth="1" height="1" width="1" disappear></a-box>
   </a-entity>
   <a-entity cursor="rayOrigin:mouse"></a-entity>
  </a-entity>
