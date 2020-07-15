@@ -3,20 +3,47 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <script src="https://aframe.io/releases/1.0.4/aframe.min.js"></script>
 <script>
+var moog = {
+  boxwidth: 0.455,
+  boxheight: 0.07,
+  boxdepth: 0.14,
+  antlength: 0.46,
+  antradius: 0.006,
+  antdx: 0.015,
+  antdz: -0.02
+};
 AFRAME.registerComponent('theremin', {
   init: function () {
-    this.left = document.querySelector('#left');
-    this.right = document.querySelector('#right');
+    this.lefthand = document.querySelector('#left');
+    this.righthand = document.querySelector('#right');
     this.text = document.querySelector('#text');
+
+    this.box = document.createElement('a-entity');
+    this.box.setAttribute('geometry', { primitive: 'box', width: moog.boxwidth, height: moog.boxheight, depth: moog.boxdepth });
+    this.box.setAttribute('material', { color: 'brown' });
+    this.el.appendChild(this.box);
+
+    this.right = document.createElement('a-entity');
+    this.right.setAttribute('geometry', { primitive: 'cylinder', height: moog.antlength, radius: moog.antradius });
+    this.right.setAttribute('position', { x: moog.boxwidth / 2 + moog.antdx, y: moog.antlength / 2, z: moog.antdz });
+    this.right.setAttribute('material', { color: 'gray' });
+    this.el.appendChild(this.right);
+
+    this.left = document.createElement('a-entity');
+    this.left.setAttribute('geometry', { primitive: 'cylinder', height: moog.antlength, radius: moog.antradius });
+    this.left.setAttribute('position', { x: - moog.boxwidth, y: 0, z: - moog.antdz });
+    this.left.setAttribute('rotation', { x: 0, y: 0, z: 90 });
+    this.left.setAttribute('material', { color: 'gray' });
+    this.el.appendChild(this.left);
   },
   tick: function(t, dt) {
-    var lp = this.left.getAttribute('position');
-    var lr = this.left.getAttribute('rotation');
-    var rp = this.right.getAttribute('position');
-    var rr = this.right.getAttribute('rotation');
+    var lp = this.lefthand.getAttribute('position');
+    var lr = this.lefthand.getAttribute('rotation');
+    var rp = this.righthand.getAttribute('position');
+    var rr = this.righthand.getAttribute('rotation');
     if (lp.x || lp.y || lp.z || rp.x || rp.y || rp.z) {
-      var txt = 'left: x=' + lp.x + ' y=' + lp.y + ' z=' + lp.z +
-             '\nright: x=' + rp.x + ' y=' + rp.y + ' z=' + rp.z;
+      var txt = 'left: x=' + lp.x.toFixed(3) + ' y=' + lp.y.toFixed(3) + ' z=' + lp.z.toFixed(3) +
+             '\nright: x=' + rp.x.toFixed(3) + ' y=' + rp.y.toFixed(3) + ' z=' + rp.z.toFixed(3);
       this.text.setAttribute('text', { 'value': txt });
     }
   }
@@ -29,7 +56,7 @@ AFRAME.registerComponent('theremin', {
  <a-sky color="#aaa"></a-sky>
  <a-entity id="left" hand-controls="hand:left;color:#f80"></a-entity>
  <a-entity id="right" hand-controls="hand:right;color:#f80"></a-entity>
- <a-entity theremin></a-entity>
+ <a-entity theremin position="0 1 -1"></a-entity>
 
  <a-entity id="camera" camera look-controls wasd-controls>
   <a-entity id="text" text="align:center;" position="0 0 -.5"></a-entity>
