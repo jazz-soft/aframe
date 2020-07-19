@@ -14,9 +14,15 @@ var moog = {
 };
 AFRAME.registerComponent('theremin', {
   init: function () {
+    this.v3 = new THREE.Vector3();
     this.lefthand = document.querySelector('#left');
     this.righthand = document.querySelector('#right');
     this.text = document.querySelector('#text');
+
+    this.trkr = document.createElement('a-entity');
+    this.trkr.setAttribute('geometry', { primitive: 'sphere', radius: 0.05 });
+    this.trkr.setAttribute('material', { color: 'blue' });
+    this.el.sceneEl.appendChild(this.trkr);
 
     this.box = document.createElement('a-entity');
     this.box.setAttribute('geometry', { primitive: 'box', width: moog.boxwidth, height: moog.boxheight, depth: moog.boxdepth });
@@ -43,8 +49,11 @@ AFRAME.registerComponent('theremin', {
     var rr = this.righthand.getAttribute('rotation');
     if (lp.x || lp.y || lp.z || rp.x || rp.y || rp.z) {
       var txt = 'left: x=' + lp.x.toFixed(3) + ' y=' + lp.y.toFixed(3) + ' z=' + lp.z.toFixed(3) +
-             '\nright: x=' + rp.x.toFixed(3) + ' y=' + rp.y.toFixed(3) + ' z=' + rp.z.toFixed(3);
+             '\nrot: x=' + lr.x.toFixed(3) + ' y=' + lr.y.toFixed(3) + ' z=' + lr.z.toFixed(3) +
+             '\nright: x=' + rp.x.toFixed(3) + ' y=' + rp.y.toFixed(3) + ' z=' + rp.z.toFixed(3) +
+             '\nrot: x=' + rr.x.toFixed(3) + ' y=' + rr.y.toFixed(3) + ' z=' + rr.z.toFixed(3);
       this.text.setAttribute('text', { 'value': txt });
+      this.trkr.setAttribute('position', { x: rp.x, y: rp.y, z: rp.z });
     }
   }
 });
