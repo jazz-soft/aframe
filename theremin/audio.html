@@ -5,9 +5,32 @@
 </head>
 <body>
 <script>
+const AC = window.AudioContext || window.webkitAudioContext;
+const ac = new AC();
+const gain = ac.createGain();
+gain.connect(ac.destination);
+
+var osc = ac.createOscillator();
+osc.type = 'square';
+osc.frequency.value = 110;
+osc.connect(gain);
+osc.start();
+
 document.addEventListener('mousemove', function(evt) {
-  console.log(evt, document.documentElement.clientWidth, document.documentElement.clientHeight);
-//evt.clientX, evt.clientY
+  if (ac.state === 'suspended')  ac.resume();
+  var h = document.documentElement.clientHeight;
+  var mh = h / 10;
+  var hh = h - mh * 2;
+  var y = (h - evt.clientY - mh) / hh;
+
+  var w = document.documentElement.clientWidth;
+  var mw = h / 10;
+  var ww = h - mh * 2;
+  var x = (evt.clientX - mw) / ww;
+  
+  var gval = y < 0 ? 0 : y > 1 ? 1 : y;
+  gain.gain.value = gval;
+
 });
 </script>
 </body>
