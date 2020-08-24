@@ -38,6 +38,12 @@ AFRAME.registerComponent('theremin', {
     this.trkr.setAttribute('material', { color: 'blue' });
     this.el.sceneEl.appendChild(this.trkr);
 
+    this.trkrx = document.createElement('a-entity');
+    this.trkrx.setAttribute('geometry', { primitive: 'sphere', radius: 0.03 });
+    this.trkrx.setAttribute('position', { x: 0.1, y: 0, z: 0.05 });
+    this.trkrx.setAttribute('material', { color: 'red' });
+    this.el.sceneEl.appendChild(this.trkrx);
+
     this.box = document.createElement('a-entity');
     this.box.setAttribute('geometry', { primitive: 'box', width: moog.boxwidth, height: moog.boxheight, depth: moog.boxdepth });
     this.box.setAttribute('material', { color: 'brown' });
@@ -61,6 +67,7 @@ AFRAME.registerComponent('theremin', {
     var lr = this.lefthand.getAttribute('rotation');
     var rp = this.righthand.getAttribute('position');
     var rr = this.righthand.getAttribute('rotation');
+var pp = this.el.getAttribute('position');
     if (lp.x || lp.y || lp.z || rp.x || rp.y || rp.z) {
       if (ac.state === 'suspended')  ac.resume();
 
