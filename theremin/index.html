@@ -28,13 +28,9 @@ AFRAME.registerComponent('theremin', {
     this.osc.connect(this.gain);
     this.osc.start();
 
-    this.v3 = new THREE.Vector3();
-    this.lefthand = document.querySelector('#left');
-    this.righthand = document.querySelector('#right');
+    this.lefthand = document.querySelector('#lefthand');
+    this.righthand = document.querySelector('#righthand');
     this.text = document.querySelector('#text');
-
-    this.trkr = document.querySelector('#leftt');
-    this.trkl = document.querySelector('#rightt');
 
     this.box = document.createElement('a-entity');
     this.box.setAttribute('geometry', { primitive: 'box', width: moog.boxwidth, height: moog.boxheight, depth: moog.boxdepth });
@@ -47,30 +43,45 @@ AFRAME.registerComponent('theremin', {
     this.right.setAttribute('material', { color: 'gray' });
     this.el.appendChild(this.right);
 
+    this.rightX1 = document.createElement('a-entity');
+    this.rightX1.setAttribute('position', { x: moog.boxwidth / 2 + moog.antdx, y: moog.antlength, z: moog.antdz });
+    this.el.appendChild(this.rightX1);
+
+    this.rightX2 = document.createElement('a-entity');
+    this.rightX2.setAttribute('position', { x: moog.boxwidth / 2 + moog.antdx, y: 0, z: moog.antdz });
+    this.el.appendChild(this.rightX2);
+
     this.left = document.createElement('a-entity');
     this.left.setAttribute('geometry', { primitive: 'cylinder', height: moog.antlength, radius: moog.antradius });
     this.left.setAttribute('position', { x: - moog.boxwidth, y: 0, z: - moog.antdz });
     this.left.setAttribute('rotation', { x: 0, y: 0, z: 90 });
     this.left.setAttribute('material', { color: 'gray' });
     this.el.appendChild(this.left);
+
+    this.v3 = new THREE.Vector3();
+    this.v3a = new THREE.Vector3();
+    this.v3b = new THREE.Vector3();
   },
   tick: function(t, dt) {
-    var lp = this.lefthand.getAttribute('position');
-    var lr = this.lefthand.getAttribute('rotation');
-    var rp = this.righthand.getAttribute('position');
-    var rr = this.righthand.getAttribute('rotation');
-var pp = this.el.getAttribute('position');
-    if (lp.x || lp.y || lp.z || rp.x || rp.y || rp.z) {
-      if (ac.state === 'suspended')  ac.resume();
-
-
-      var txt = 'left: x=' + lp.x.toFixed(3) + ' y=' + lp.y.toFixed(3) + ' z=' + lp.z.toFixed(3) +
-             '\nrot: x=' + lr.x.toFixed(3) + ' y=' + lr.y.toFixed(3) + ' z=' + lr.z.toFixed(3) +
-             '\nright: x=' + rp.x.toFixed(3) + ' y=' + rp.y.toFixed(3) + ' z=' + rp.z.toFixed(3) +
-             '\nrot: x=' + rr.x.toFixed(3) + ' y=' + rr.y.toFixed(3) + ' z=' + rr.z.toFixed(3);
-      this.text.setAttribute('text', { 'value': txt });
-      //this.trkr.setAttribute('position', { x: rp.x, y: rp.y, z: rp.z });
-    }
+    this.v3.setFromMatrixPosition(this.righthand.object3D.matrixWorld);
+    this.v3a.setFromMatrixPosition(this.rightX1.object3D.matrixWorld);
+    this.v3b.setFromMatrixPosition(this.rightX2.object3D.matrixWorld);
+    if (ac.state === 'suspended')  ac.resume();
+    var txt = this.dist(this.v3, this.v3a, this.v3b).toFixed(3);
+    this.text.setAttribute('text', { 'value': txt });
+  },
+  dist: function(x, a, b) {
+    var x0 = b.x - a.x;
+    var y0 = b.y - a.y;
+    var z0 = b.z - a.z;
+    var x1 = x.x - a.x;
+    var y1 = x.y - a.y;
+    var z1 = x.z - a.z;
+    var lsq = x0 * x0 + y0 * y0 + z0 * z0;
+    var xsq = x1 * x1 + y1 * y1 + z1 * z1;
+    var xx = x0 * x1 + y0 * y1 + z0 * z1;
+    var psq = xx * xx / lsq;
+    return Math.sqrt(xsq - psq);
   }
 });
 </script>
@@ -80,10 +91,10 @@ var pp = this.el.getAttribute('position');
 
  <a-sky color="#aaa"></a-sky>
  <a-entity id="left" hand-controls="hand:left;color:#f80">
-   <a-entity id="leftt" geometry="primitive:sphere; radius: 0.01" position="0 0 -0.07" material="color:black"></a-entity>
+   <a-entity id="lefthand" geometry="primitive:sphere; radius: 0.01" position="0 0 -0.08"></a-entity>
  </a-entity>
  <a-entity id="right" hand-controls="hand:right;color:#f80">
-   <a-entity id="rightt" geometry="primitive:sphere; radius: 0.01"; position="0 0 -0.07"material="color:white"></a-entity>
+   <a-entity id="righthand" geometry="primitive:sphere; radius: 0.01"; position="0 0 -0.08"></a-entity>
  </a-entity>
  <a-entity theremin position="0 1.2 -1"></a-entity>
  <a-entity geometry="primitive: cylinder; height: 1.2; radius: 0.01" position="0 0.6 -1" material="color:black"></a-entity>
