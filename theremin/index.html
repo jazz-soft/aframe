@@ -13,7 +13,9 @@ const pitchfar = 1.0;
 const gainnear = 0.02;
 const gainfar = 0.2;
 function freq(x) {
-  const y = 1 - x;
+  var y = 1 - x;
+  y = y * y;
+  x = 1 - y;
   return Math.exp(x * logA + y * logB);
 }
 
