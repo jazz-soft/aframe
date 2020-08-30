@@ -168,17 +168,19 @@ AFRAME.registerComponent('theremin', {
 
 </a-scene>
 <script>
-var param = { x: 0, y: 1.2, z: -1 };
+var a, i, x;
+var param = { x: 0, y: 1.2, z: -1, d: 1, lo: 1, hi: 15000 };
 var query = window.location.href.split('?')[1];
 if (query) query = query.split('#')[0];
 query = query ? query.split('&') : [];
-for (var i = 0; i < query.length; i++) {
-  var a = query[i].split('=');
-  param[decodeURIComponent(a[0])] = decodeURIComponent(a[1]).replace(/\+/g, ' ');
+for (i = 0; i < query.length; i++) {
+  a = query[i].split('=');
+  x = decodeURIComponent(a[1]).replace(/\+/g, ' ');
+  if (x == parseFloat(x)) param[decodeURIComponent(a[0])] = x;
 }
-
 document.querySelector('#base').setAttribute('position', { x: param.x, y: 0, z: param.z });
 document.querySelector('#stand').setAttribute('position', { x: param.x, y: param.y / 2, z: param.z });
+document.querySelector('#stand').setAttribute('geometry', { height: param.y });
 document.querySelector('#theremin').setAttribute('position', { x: param.x, y: param.y, z: param.z });
 var text = document.querySelector('#text');
 text.setAttribute('text', { 'value': 'This app requires hand controls!' });
