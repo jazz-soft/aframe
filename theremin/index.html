@@ -158,9 +158,9 @@ AFRAME.registerComponent('theremin', {
    <a-entity id="right4" position="0 0 0.1"></a-entity>
    <a-entity id="right5" position="-0.02 0 -0.07"></a-entity>
  </a-entity>
- <a-entity theremin position="0 1.2 -1"></a-entity>
- <a-entity geometry="primitive: cylinder; height: 1.2; radius: 0.01" position="0 0.6 -1" material="color:black"></a-entity>
- <a-entity geometry="primitive: cylinder; height: 0.03; radius: 0.2" position="0 0 -1" material="color:black"></a-entity>
+ <a-entity id=theremin theremin position="0 1.2 -1"></a-entity>
+ <a-entity id=stand geometry="primitive: cylinder; height: 1.2; radius: 0.01" position="0 0.6 -1" material="color:black"></a-entity>
+ <a-entity id=base geometry="primitive: cylinder; height: 0.03; radius: 0.2" position="0 0 -1" material="color:black"></a-entity>
 
  <a-entity id="camera" camera look-controls wasd-controls>
   <a-entity id="text" text="align:center;" position="0 0 -.5"></a-entity>
@@ -168,6 +168,18 @@ AFRAME.registerComponent('theremin', {
 
 </a-scene>
 <script>
+var param = { x: 0, y: 1.2, z: -1 };
+var query = window.location.href.split('?')[1];
+if (query) query = query.split('#')[0];
+query = query ? query.split('&') : [];
+for (var i = 0; i < query.length; i++) {
+  var a = query[i].split('=');
+  param[decodeURIComponent(a[0])] = decodeURIComponent(a[1]).replace(/\+/g, ' ');
+}
+
+document.querySelector('#base').setAttribute('position', { x: param.x, y: 0, z: param.z });
+document.querySelector('#stand').setAttribute('position', { x: param.x, y: param.y / 2, z: param.z });
+document.querySelector('#theremin').setAttribute('position', { x: param.x, y: param.y, z: param.z });
 var text = document.querySelector('#text');
 text.setAttribute('text', { 'value': 'This app requires hand controls!' });
 </script>
