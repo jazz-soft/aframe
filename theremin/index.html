@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
+<title>VR Theremin</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta property="og:image" content="og-image-1200-630.png" />
 <meta property="og:title" content="VR Theremin" />
@@ -9,12 +10,12 @@
 <script>
 const AC = window.AudioContext || window.webkitAudioContext;
 const ac = new AC();
-const logA = Math.log(15);
-const logB = Math.log(15000);
-const pitchnear = 0.02;
-const pitchfar = 2.0;
-const gainnear = 0.02;
-const gainfar = 0.2;
+var logA;
+var logB;
+var pitchnear = 0.02;
+var pitchfar = 2.0;
+var gainnear = 0.02;
+var gainfar = 0.2;
 function freq(x) {
   var y = 1 - x;
   y = y * y;
@@ -143,7 +144,6 @@ AFRAME.registerComponent('theremin', {
 </head>
 <body>
 <a-scene>
-
  <a-sky color="#aaa"></a-sky>
  <a-entity id="left" hand-controls="hand:left;color:#f80">
    <a-entity id="left0" position="0 0 0"></a-entity>
@@ -168,11 +168,10 @@ AFRAME.registerComponent('theremin', {
  <a-entity id="camera" camera look-controls wasd-controls>
   <a-entity id="text" text="align:center;" position="0 0 -.5"></a-entity>
  </a-entity>
-
 </a-scene>
 <script>
 var a, i, x;
-var param = { x: 0, y: 1.2, z: -1, d: 1, lo: 1, hi: 15000 };
+var param = { x: 0, y: 1.2, z: -1, d: 1.5, lo: 15, hi: 15000 };
 var query = window.location.href.split('?')[1];
 if (query) query = query.split('#')[0];
 query = query ? query.split('&') : [];
@@ -181,6 +180,9 @@ for (i = 0; i < query.length; i++) {
   x = decodeURIComponent(a[1]).replace(/\+/g, ' ');
   if (x == parseFloat(x)) param[decodeURIComponent(a[0])] = x;
 }
+logA = Math.log(param.lo);
+logB = Math.log(param.hi);
+pitchfar = param.d;
 document.querySelector('#base').setAttribute('position', { x: param.x, y: 0, z: param.z });
 document.querySelector('#stand').setAttribute('position', { x: param.x, y: param.y / 2, z: param.z });
 document.querySelector('#stand').setAttribute('geometry', { height: param.y });
