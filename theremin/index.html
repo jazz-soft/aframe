@@ -140,6 +140,28 @@ AFRAME.registerComponent('theremin', {
     return Math.sqrt(xsq - psq);
   }
 });
+
+var piano = {
+  width: 1.6,
+  height: 0.08,
+};
+AFRAME.registerComponent('pianokeys', {
+  init: function () {
+    var i, k, box;
+    var wid = piano.width / 128;
+    var start = (wid - piano.width) / 2;
+    var dw = wid * .1;
+    for (i = 0; i < 128; i++) {
+      k = i % 12;
+      k = k == 1 || k == 3 || k == 6 || k == 8 || k == 10;
+      box = document.createElement('a-entity');
+      box.setAttribute('geometry', { primitive: 'plane', width: wid - dw, height: piano.height });
+      box.setAttribute('position', { x: start + wid * i, y: 0 });
+      box.setAttribute('material', { color: k ? 'black' : 'white', opacity: 0.2, shader: 'flat' });
+      this.el.appendChild(box);
+    }
+  }
+});
 </script>
 </head>
 <body>
@@ -167,6 +189,7 @@ AFRAME.registerComponent('theremin', {
 
  <a-entity id="camera" camera look-controls wasd-controls>
   <a-entity id="text" text="align:center;" position="0 0 -.5"></a-entity>
+  <a-entity id=piano pianokeys position="0 -.1 -.5"></a-entity>
  </a-entity>
 </a-scene>
 <script>
