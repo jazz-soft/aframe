@@ -10,12 +10,14 @@
 <script>
 const AC = window.AudioContext || window.webkitAudioContext;
 const ac = new AC();
+var log440 = Math.log2(440);
 var logA;
 var logB;
 var pitchnear = 0.02;
 var pitchfar = 2.0;
 var gainnear = 0.02;
 var gainfar = 0.2;
+var playingnote = 60;
 function freq(x) {
   var y = 1 - x;
   y = y * y;
@@ -23,7 +25,9 @@ function freq(x) {
   x = 1 - y;
   return Math.exp(x * logA + y * logB);
 }
-
+function note(f) {
+  return (Math.log2(f) - log440) * 12 + 69;
+}
 var moog = {
   boxwidth: 0.455,
   boxheight: 0.07,
@@ -97,9 +101,11 @@ AFRAME.registerComponent('theremin', {
     var pitch = dd[0] < pitchnear ? 0 : dd[0] > pitchfar ? 1 : (dd[0] - pitchnear) / (pitchfar - pitchnear);
     var gain = dd[1] < gainnear ? 0 : dd[1] > gainfar ? 1 : (dd[1] - gainnear) / (gainfar - gainnear);
     this.gain.gain.value = gain;
-    this.osc.frequency.value = freq(pitch);
-
+    var frequency = freq(pitch);
+    playingnote = note(frequency);
+    this.osc.frequency.value = frequency;
     var pp = this.righthand.getAttribute('position');
+
     if (pp.x || pp.y || pp.z) {
       this.text.setAttribute('text', { 'value': '' });
     }
@@ -148,18 +154,25 @@ var piano = {
 AFRAME.registerComponent('pianokeys', {
   init: function () {
     var i, k, box;
-    var wid = piano.width / 128;
-    var start = (wid - piano.width) / 2;
-    var dw = wid * .1;
+    this.wid = piano.width / 128;
+    this.start = (this.wid - piano.width) / 2;
+    var dw = this.wid * .1;
     for (i = 0; i < 128; i++) {
       k = i % 12;
       k = k == 1 || k == 3 || k == 6 || k == 8 || k == 10;
       box = document.createElement('a-entity');
-      box.setAttribute('geometry', { primitive: 'plane', width: wid - dw, height: piano.height });
-      box.setAttribute('position', { x: start + wid * i, y: 0 });
+      box.setAttribute('geometry', { primitive: 'plane', width: this.wid - dw, height: piano.height });
+      box.setAttribute('position', { x: this.start + this.wid * i, y: 0 });
       box.setAttribute('material', { color: k ? 'black' : 'white', opacity: 0.2, shader: 'flat' });
       this.el.appendChild(box);
     }
+    this.marker = document.createElement('a-entity');
+    this.marker.setAttribute('geometry', { primitive: 'sphere', radius: dw * 3 });
+    this.marker.setAttribute('material', { color: 'red', shader: 'flat' });
+    this.el.appendChild(this.marker);
+  },
+  tick: function(t, dt) {
+    this.marker.setAttribute('position', { x: this.start + this.wid * playingnote });
   }
 });
 </script>
