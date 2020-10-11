@@ -17,6 +17,7 @@ var pitchnear = 0.02;
 var pitchfar = 2.0;
 var gainnear = 0.02;
 var gainfar = 0.2;
+var gainstop = 1;
 var playingnote = 60;
 function freq(x) {
   var y = 1 - x;
@@ -99,7 +100,7 @@ AFRAME.registerComponent('theremin', {
     this.v3d.setFromMatrixPosition(this.leftX2.object3D.matrixWorld);
     var dd = this.distances();
     var pitch = dd[0] < pitchnear ? 0 : dd[0] > pitchfar ? 1 : (dd[0] - pitchnear) / (pitchfar - pitchnear);
-    var gain = dd[1] < gainnear ? 0 : dd[1] > gainfar ? 1 : (dd[1] - gainnear) / (gainfar - gainnear);
+    var gain = dd[1] < gainnear || dd[1] > gainstop ? 0 : dd[1] > gainfar ? 1 : (dd[1] - gainnear) / (gainfar - gainnear);
     this.gain.gain.value = gain;
     var frequency = freq(pitch);
     playingnote = note(frequency);
@@ -167,7 +168,7 @@ AFRAME.registerComponent('pianokeys', {
       this.el.appendChild(box);
     }
     this.marker = document.createElement('a-entity');
-    this.marker.setAttribute('geometry', { primitive: 'sphere', radius: dw * 3 });
+    this.marker.setAttribute('geometry', { primitive: 'plane', width: dw * 2, height: piano.height });
     this.marker.setAttribute('material', { color: 'red', shader: 'flat' });
     this.el.appendChild(this.marker);
   },
